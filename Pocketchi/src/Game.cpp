@@ -3,18 +3,23 @@
 
 #include "menus/TitleMenu.h"
 #include "utils/events/IdleScreen.h"
+#include "utils/events/TimeEventScreen.h"
 #include "utils/events/GeneralScreen.h"
+#include "utils/events/BattleScreen.h"
 
 Arduboy2Base arduboy;
 
 uint8_t onStage;
+bool battleAction;
 
 Utils utils;
 Stats stats;
 
 TitleMenu titleMenu;
 IdleScreen idleScreen;
+TimeEventScreen timeEventScreen;
 GeneralScreen generalscreen;
+BattleScreen battleScreen;
 
 void Game::setup(void)
 {
@@ -51,13 +56,19 @@ void Game::loop(void)
     mainBattleTick();
     break;
   case 3:
-    mainFoodTick();
+    mainBattleAnimationTick();
     break;
   case 4:
-    mainHealthTick();
+    mainFoodTick();
     break;
   case 5:
+    mainHealthTick();
+    break;
+  case 6:
     mainSickTick();
+    break;
+  case 7:
+    mainVictoryTick();
     break;
   default:
     mainAutosaveTick();
@@ -85,10 +96,11 @@ void Game::mainIdleTick(void)
   switch (idleScreen.action(&utils))
   {
   case 1:
-    // onStage = 2;
+    onStage = 4;
     break;
   case 2:
-    // onStage = 0;
+    stats.startBattle();
+    onStage = 2;
     break;
   }
 
@@ -97,107 +109,64 @@ void Game::mainIdleTick(void)
 
 void Game::mainBattleTick(void)
 {
-  /*
-  if (arduboy.justPressed(A_BUTTON))
+  timeEventScreen.eventDisplay(&utils, &stats);
+  switch (timeEventScreen.action(&utils, &stats))
   {
-    pauseMenu.refresh();
-    onStage = 1;
-
-    stats.displayHub(&numbers);
-    dungeon.borders();
+  case 1:
+    onStage = 3;
+    battleAction = false;
+    battleScreen.refresh();
+    break;
+  case 2:
+    onStage = 3;
+    battleAction = true;
+    battleScreen.refresh();
+    break;
   }
-  else
+
+  generalscreen.eventDisplay(&utils);
+}
+
+void Game::mainBattleAnimationTick(void)
+{
+  battleScreen.eventDisplay(&utils, &stats, battleAction);
+  switch (battleScreen.action(&utils, &stats, battleAction))
   {
-    action = dungeon.movePlayer(&utils, &stats);
-    if (actions.evaluateAction(&utils, &stats, &dungeon, action))
-    {
-      dungeon.cutsceneStart(false);
-      onStage = 4;
-    }
-    else if (dungeon.level < MAX_LEVEL)
-    {
-      dungeon.display(utils.cycle, utils.mode);
-    }
-
-    if ((utils.mode == 0 && dungeon.level == MAX_LEVEL) || (utils.mode == 1 && dungeon.level == MAX_CHALLENGE_LEVEL) || (utils.mode == 2 && dungeon.level == MAX_ADVANCE_LEVEL))
-    {
-      dungeon.cutsceneStart(false);
-      onStage = 6;
-    }
-    else if (stats.getHP() < 1)
-    {
-      utils.overBeep();
-      dungeon.cutsceneStart(true);
-      onStage = 5;
-    }
-    else
-    {
-      stats.displayHub(&numbers);
-      dungeon.borders();
-    }
+  case 1:
+    onStage = 2; // continue
+    break;
+  case 2:
+    onStage = 6; // sick / loss
+    break;
+  case 3:
+    onStage = 7; // won
+    break;
   }
-  */
+
+  generalscreen.eventDisplay(&utils);
 }
 
 void Game::mainFoodTick(void)
 {
-  /*
-  dungeon.cutscene.eventDisplay();
-  if (utils.mode == 0)
-  {
-    Arduboy2Base::drawBitmap(0, 0, Title::title_loading, 128, 64, WHITE);
-  }
-  else if (utils.mode == 1)
-  {
-    Arduboy2Base::drawBitmap(0, 0, Title::title_loading_2, 128, 64, WHITE);
-  }
-  else if (utils.mode == 2)
-  {
-    Arduboy2Base::drawBitmap(0, 0, Title::title_loading_3, 128, 64, WHITE);
-  }
-  if (dungeon.cutscene.enabled())
-  {
-    onStage = 2;
-  }
-  */
+  onStage = 1;
 }
 
 void Game::mainHealthTick(void)
 {
-  /*
-  dungeon.displayLevelStart(&utils, &effects);
-  dungeon.cutscene.eventDisplay();
-  if (dungeon.cutscene.enabled())
-  {
-    onStage = 2;
-  }
-
-  dungeon.borders();
-  dungeon.displayLevel(&numbers);
-  stats.displayHub(&numbers, false);
-  */
+  onStage = 1;
 }
 
 void Game::mainSickTick(void)
 {
-  /*
-  dungeon.displayGameOver(&stats, &numbers);
-  dungeon.cutscene.eventDisplay();
-  if (dungeon.cutscene.enabled() && (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON) || arduboy.justPressed(LEFT_BUTTON) || arduboy.justPressed(RIGHT_BUTTON)))
-  {
-    onStage = 0;
-  }
-  */
+  onStage = 1;
+}
+
+void Game::mainVictoryTick(void)
+{
+  onStage = 1;
 }
 
 void Game::mainAutosaveTick(void)
 {
-  /*
-  dungeon.displayEnding(&stats, &numbers);
-  dungeon.cutscene.eventDisplay();
-  if (dungeon.cutscene.enabled() && (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON) || arduboy.justPressed(LEFT_BUTTON) || arduboy.justPressed(RIGHT_BUTTON)))
-  {
-    onStage = 0;
-  }
-  */
+  onStage = 1;
 }

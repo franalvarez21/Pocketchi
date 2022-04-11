@@ -4,17 +4,16 @@ struct Stats
 {
   uint8_t hp;
   uint8_t hpEnemy;
-  uint8_t hurt;
-  uint8_t hurtEnemy;
   uint8_t level;
   uint8_t distance;
+  uint8_t battleBarPoints[MAX_BATTLE_POINTS];
+  uint8_t arrowPosition;
+  bool arrowDirection;
 
   void init()
   {
     hp = MAX_LIFE;
     hpEnemy = 0;
-    hurt = 0;
-    hurtEnemy = 0;
     level = 1;
     distance = MAX_MOVEMENT_STEPS;
     startBattle();
@@ -22,8 +21,6 @@ struct Stats
 
   void startBattle()
   {
-    hurt = 0;
-    hurtEnemy = 0;
     if (distance > 0)
     {
       hpEnemy = level;
@@ -32,71 +29,66 @@ struct Stats
     {
       hpEnemy = MAX_LIFE;
     }
+
+    for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
+    {
+      battleBarPoints[i] = rand() % 100 < ((level + 2) * 10) ? 0 : 1;
+    }
+    arrowPosition = 0;
+    arrowDirection = true;
+  }
+
+  uint8_t getHP()
+  {
+    return hp;
+  }
+
+  uint8_t getHPEnemy()
+  {
+    return hpEnemy;
+  }
+
+  uint8_t getArrowPosition(bool modifyPosition)
+  {
+    if (modifyPosition)
+    {
+      if (arrowDirection)
+      {
+        arrowPosition++;
+        if (arrowPosition == MAX_BATTLE_POINTS - 1)
+        {
+          arrowDirection = false;
+        }
+      }
+      else
+      {
+        arrowPosition--;
+        if (arrowPosition == 0)
+        {
+          arrowDirection = true;
+        }
+      }
+    }
+    return arrowPosition;
+  }
+
+  uint8_t getBar(uint8_t position)
+  {
+    return battleBarPoints[position];
   }
 
   void incHP(uint8_t val)
   {
     hp = min(hp + val, MAX_LIFE);
-    hurt = 0;
   }
 
   void decHP(uint8_t val)
   {
     hp = max(hp - val, 0);
-    hurt = MAX_ANIMATION_FRAMES;
   }
 
-  void displayHub()
+  void decHPEnemy(uint8_t val)
   {
-    /*
-    timeTick();
-
-    Arduboy2Base::drawBitmap(0, pos * ELEMENT_SIZE, Common::life, ELEMENT_SIZE, ELEMENT_SIZE, WHITE);
-    Arduboy2Base::drawBitmap(0, pos * ELEMENT_SIZE, Common::life, ELEMENT_SIZE, ELEMENT_SIZE, WHITE);
-
-    if (hurt > 0 && hurt % 2 == 0)
-    {
-      displayHeart(hp);
-    }
-
-    if (hurtEnemy > 0 && hurtEnemy % 2 == 0)
-    {
-      displayHeartEnemy(hpEnemy);
-    }
-    */
-  }
-
-private:
-  void timeTick()
-  {
-    if (hurt > 0)
-    {
-      hurt--;
-    }
-
-    if (hurtEnemy > 0)
-    {
-      hurtEnemy--;
-    }
-  }
-
-  void displayHeart(uint8_t pos)
-  {
-    /*
-    for (uint8_t pos = 0; pos < hp; pos++)
-    {
-      Arduboy2Base::drawBitmap(0, pos * ELEMENT_SIZE, Common::life, ELEMENT_SIZE, ELEMENT_SIZE, WHITE);
-    }
-    */
-  }
-
-  void displayHeartEnemy(uint8_t pos)
-  {
-    /*
-    for (uint8_t pos = 0; pos < hp; pos++)
-    {
-      Arduboy2Base::drawBitmap(0, pos * ELEMENT_SIZE, Common::life, ELEMENT_SIZE, ELEMENT_SIZE, WHITE);
-    }
-    */
+    hpEnemy = max(hpEnemy - val, 0);
   }
 };

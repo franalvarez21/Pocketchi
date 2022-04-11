@@ -10,15 +10,15 @@ private:
   uint8_t cycleMoving = 0;
 
 public:
-  bool action(Utils *utils)
+  uint8_t action(Utils *utils)
   {
     if (Arduboy2Base::justPressed(B_BUTTON))
     {
-      return 1;
+      return 2;
     }
     if (Arduboy2Base::justPressed(A_BUTTON))
     {
-      return 2;
+      return 1;
     }
     return 0;
   }

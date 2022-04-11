@@ -21,8 +21,10 @@ public:
   void mainMenuTick(void);
   void mainIdleTick(void);
   void mainBattleTick(void);
+  void mainBattleAnimationTick(void);
   void mainFoodTick(void);
   void mainHealthTick(void);
   void mainSickTick(void);
+  void mainVictoryTick(void);
   void mainAutosaveTick(void);
 };
