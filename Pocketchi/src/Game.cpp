@@ -4,8 +4,11 @@
 #include "menus/TitleMenu.h"
 #include "utils/events/IdleScreen.h"
 #include "utils/events/TimeEventScreen.h"
-#include "utils/events/GeneralScreen.h"
 #include "utils/events/BattleScreen.h"
+#include "utils/events/VictoryScreen.h"
+#include "utils/events/FoodScreen.h"
+#include "utils/events/LossScreen.h"
+#include "utils/events/SickScreen.h"
 
 Arduboy2Base arduboy;
 
@@ -18,8 +21,11 @@ Stats stats;
 TitleMenu titleMenu;
 IdleScreen idleScreen;
 TimeEventScreen timeEventScreen;
-GeneralScreen generalscreen;
 BattleScreen battleScreen;
+VictoryScreen victoryScreen;
+FoodScreen foodScreen;
+LossScreen lossScreen;
+SickScreen sickScreen;
 
 void Game::setup(void)
 {
@@ -32,6 +38,7 @@ void Game::setup(void)
 
   stats.init();
   onStage = 0;
+  idleScreen.refreshMessageCycle();
 }
 
 void Game::loop(void)
@@ -62,10 +69,10 @@ void Game::loop(void)
     mainFoodTick();
     break;
   case 5:
-    mainHealthTick();
+    mainSickTick();
     break;
   case 6:
-    mainSickTick();
+    mainLossTick();
     break;
   case 7:
     mainVictoryTick();
@@ -83,28 +90,28 @@ void Game::loop(void)
 void Game::mainMenuTick(void)
 {
   rand() % analogRead(0);
-  titleMenu.eventDisplay(&utils);
-  if (titleMenu.action(&utils))
+  titleMenu.eventDisplay();
+  if (titleMenu.action())
   {
     onStage = 1;
+    idleScreen.refresh();
   }
 }
 
 void Game::mainIdleTick(void)
 {
-  idleScreen.eventDisplay(&utils);
+  idleScreen.eventDisplay(&utils, &stats);
   switch (idleScreen.action(&utils))
   {
   case 1:
     onStage = 4;
+    foodScreen.refresh();
     break;
   case 2:
-    stats.startBattle();
     onStage = 2;
+    stats.startBattle();
     break;
   }
-
-  generalscreen.eventDisplay(&utils);
 }
 
 void Game::mainBattleTick(void)
@@ -123,47 +130,69 @@ void Game::mainBattleTick(void)
     battleScreen.refresh();
     break;
   }
-
-  generalscreen.eventDisplay(&utils);
 }
 
 void Game::mainBattleAnimationTick(void)
 {
   battleScreen.eventDisplay(&utils, &stats, battleAction);
-  switch (battleScreen.action(&utils, &stats, battleAction))
+  switch (battleScreen.action(&stats, battleAction))
   {
   case 1:
-    onStage = 2; // continue
+    onStage = 2;
+    stats.refresh();
     break;
   case 2:
-    onStage = 6; // sick / loss
+    onStage = 6;
+    lossScreen.refresh();
+    stats.incHP(MAX_LIFE);
+    stats.refreshDistance();
     break;
   case 3:
-    onStage = 7; // won
+    onStage = 7;
+    victoryScreen.refresh();
+    stats.redDistance(1);
     break;
   }
-
-  generalscreen.eventDisplay(&utils);
 }
 
 void Game::mainFoodTick(void)
 {
-  onStage = 1;
-}
-
-void Game::mainHealthTick(void)
-{
-  onStage = 1;
+  foodScreen.eventDisplay(&utils, &stats);
+  if (foodScreen.action(&utils))
+  {
+    onStage = 7;
+    victoryScreen.refresh();
+  }
 }
 
 void Game::mainSickTick(void)
 {
-  onStage = 1;
+  sickScreen.eventDisplay(&utils);
+  if (sickScreen.action(&utils))
+  {
+    onStage = 7;
+    victoryScreen.refresh();
+  }
+}
+
+void Game::mainLossTick(void)
+{
+  lossScreen.eventDisplay(&utils);
+  if (lossScreen.action(&utils))
+  {
+    onStage = 5;
+    sickScreen.refresh();
+  }
 }
 
 void Game::mainVictoryTick(void)
 {
-  onStage = 1;
+  victoryScreen.eventDisplay(&utils);
+  if (victoryScreen.action(&utils))
+  {
+    onStage = 1;
+    idleScreen.refresh();
+  }
 }
 
 void Game::mainAutosaveTick(void)

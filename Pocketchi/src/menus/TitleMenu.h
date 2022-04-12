@@ -10,24 +10,24 @@ private:
   bool actionType = false;
 
 public:
-  bool action(Utils *utils)
+  bool action()
   {
-    if(!actionFlag)
+    if (!actionFlag)
     {
-      if(Arduboy2Base::justPressed(A_BUTTON))
+      if (Arduboy2Base::justPressed(A_BUTTON))
       {
         actionTime = MAX_ANIMATION_FRAMES;
         actionType = false;
         actionFlag = true;
       }
-      else if(Arduboy2Base::justPressed(B_BUTTON))
+      else if (Arduboy2Base::justPressed(B_BUTTON))
       {
         actionTime = MAX_ANIMATION_FRAMES;
         actionType = true;
         actionFlag = true;
       }
     }
-    else if(actionTime == 0)
+    else if (actionTime == 0)
     {
       actionTime = MAX_ANIMATION_FRAMES;
       actionFlag = false;
@@ -36,19 +36,18 @@ public:
     return false;
   }
 
-  void eventDisplay(Utils *utils)
+  void eventDisplay()
   {
     Arduboy2Base::drawBitmap(0, 0, Title::titleScreen, 128, 64, WHITE);
-    Arduboy2Base::drawBitmap(90, 30, Common::actionButton, 30, 30, WHITE);
 
-    if(actionFlag)
+    if (actionFlag)
     {
-      if(actionTime > 0)
+      if (actionTime > 0)
       {
         actionTime--;
       }
 
-      if(actionType)
+      if (actionType)
       {
         Arduboy2Base::drawBitmap(90, 30, Common::actionButtonOK, 30, 30, WHITE);
       }
@@ -56,6 +55,10 @@ public:
       {
         Arduboy2Base::drawBitmap(90, 30, Common::actionButtonKO, 30, 30, WHITE);
       }
+    }
+    else
+    {
+      Arduboy2Base::drawBitmap(90, 30, Common::actionButton, 30, 30, WHITE);
     }
   }
 };

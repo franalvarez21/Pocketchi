@@ -41,9 +41,7 @@ public:
 
   void eventDisplay(Utils *utils, Stats *stats)
   {
-    Arduboy2Base::drawBitmap(49, 30, Common::actionButton, 30, 30, WHITE);
     Arduboy2Base::drawBitmap(8, 16, Common::battleBar, 112, 10, WHITE);
-
     Arduboy2Base::drawBitmap(7 + (stats->getArrowPosition(!actionFlag) * 8), 4, Common::arrowDown, 10, 10, WHITE);
     for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
     {
@@ -68,6 +66,10 @@ public:
       {
         Arduboy2Base::drawBitmap(49, 30, Common::actionButtonKO, 30, 30, WHITE);
       }
+    }
+    else
+    {
+      Arduboy2Base::drawBitmap(49, 30, Common::actionButton, 30, 30, WHITE);
     }
   }
 };

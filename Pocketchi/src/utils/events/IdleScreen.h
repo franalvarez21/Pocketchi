@@ -3,47 +3,76 @@
 class IdleScreen
 {
 private:
-  bool moving = false;
-  bool direction = false;
-  uint8_t currentPosition = MAX_MOVEMENT_STEPS - 3;
-  uint8_t cycleIdle = MAX_ANIMATION_FRAMES * 2;
-  uint8_t cycleMoving = 0;
+  bool moving;
+  bool direction;
+  uint8_t currentPosition;
+  uint8_t cycleIdle;
+  uint8_t cycleMoving;
+  uint8_t messageCycle;
 
 public:
   uint8_t action(Utils *utils)
   {
+    if (Arduboy2Base::justPressed(RIGHT_BUTTON) || Arduboy2Base::justPressed(LEFT_BUTTON) || Arduboy2Base::justPressed(UP_BUTTON) || Arduboy2Base::justPressed(DOWN_BUTTON))
+    {
+      refreshMessageCycle();
+    }
     if (Arduboy2Base::justPressed(B_BUTTON))
     {
+      messageCycle = 0;
       return 2;
     }
     if (Arduboy2Base::justPressed(A_BUTTON))
     {
+      messageCycle = 0;
       return 1;
     }
     return 0;
   }
 
-  void eventDisplay(Utils *utils)
+  void refresh()
   {
-    uint8_t screenPosition = currentPosition * 12;
-    uint8_t heightPosition = 28;
+    moving = false;
+    direction = false;
+    currentPosition = MAX_MOVEMENT_STEPS - 3;
+    cycleIdle = MAX_ANIMATION_FRAMES * 2;
+    cycleMoving = 0;
+  }
 
+  void refreshMessageCycle()
+  {
+    messageCycle = MAX_ANIMATION_FRAMES * 2;
+  }
+
+  void eventDisplay(Utils *utils, Stats *stats)
+  {
     timeTick();
+
+    if (messageCycle > 0)
+    {
+      messageCycle--;
+
+      utils->texts.printLine(8, 8, "LEVEL");
+      utils->texts.printValue(34, 8, stats->getLevel());
+
+      utils->texts.printLine(75, 8, "DISTANCE");
+      utils->texts.printValue(116, 8, stats->getDistance());
+    }
 
     if (moving)
     {
       if (direction)
       {
-        displayMovingRight(utils, currentPosition, screenPosition, heightPosition);
+        utils->charDraw.DisplayMovingRight(utils->cycle, currentPosition, 28);
       }
       else
       {
-        displayMovingLeft(utils, currentPosition, screenPosition, heightPosition);
+        utils->charDraw.DisplayMovingLeft(utils->cycle, currentPosition, 28);
       }
     }
     else
     {
-      displayIdle(utils, currentPosition, screenPosition, heightPosition);
+      utils->charDraw.DisplayIdle(utils->cycle, currentPosition, 28);
     }
   }
 
@@ -106,58 +135,6 @@ public:
           }
         }
       }
-    }
-  }
-
-  void displayMovingLeft(Utils *utils, uint8_t position, uint8_t screenPosition, uint8_t heightPosition)
-  {
-    if (utils->cycle < CYCLE_HALF)
-    {
-      Arduboy2Base::drawBitmap(screenPosition, heightPosition, Pet::body, 32, 32, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 6, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 22, heightPosition - 4, Pet::rightEar, 16, 16, WHITE);
-    }
-    else
-    {
-      Arduboy2Base::drawBitmap(screenPosition, heightPosition, Pet::body2, 32, 32, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 6, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 22, heightPosition - 2, Pet::rightEar2, 16, 16, WHITE);
-    }
-  }
-
-  void displayMovingRight(Utils *utils, uint8_t position, uint8_t screenPosition, uint8_t heightPosition)
-  {
-    if (utils->cycle < CYCLE_HALF)
-    {
-      Arduboy2Base::drawBitmap(screenPosition, heightPosition, Pet::body, 32, 32, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 18, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition - 6, heightPosition - 4, Pet::leftEar, 16, 16, WHITE);
-    }
-    else
-    {
-      Arduboy2Base::drawBitmap(screenPosition, heightPosition, Pet::body2, 32, 32, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 18, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition - 6, heightPosition - 2, Pet::leftEar2, 16, 16, WHITE);
-    }
-  }
-
-  void displayIdle(Utils *utils, uint8_t position, uint8_t screenPosition, uint8_t heightPosition)
-  {
-    if (utils->cycle < CYCLE_HALF)
-    {
-      Arduboy2Base::drawBitmap(screenPosition, heightPosition, Pet::body, 32, 32, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 6, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 18, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition - 6, heightPosition - 4, Pet::leftEar, 16, 16, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 22, heightPosition - 4, Pet::rightEar, 16, 16, WHITE);
-    }
-    else
-    {
-      Arduboy2Base::drawBitmap(screenPosition, heightPosition, Pet::body2, 32, 32, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 6, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 18, heightPosition + 19, Pet::eye, 8, 8, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition - 6, heightPosition - 2, Pet::leftEar2, 16, 16, WHITE);
-      Arduboy2Base::drawBitmap(screenPosition + 22, heightPosition - 2, Pet::rightEar2, 16, 16, WHITE);
     }
   }
 };
