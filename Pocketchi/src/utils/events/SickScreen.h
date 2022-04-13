@@ -24,7 +24,7 @@ public:
   void refresh()
   {
     waitingAction = true;
-    cycleAnimation = MAX_ANIMATION_FRAMES * 2;
+    cycleAnimation = MAX_ANIMATION_FRAMES;
   }
 
   void eventDisplay(Utils *utils)

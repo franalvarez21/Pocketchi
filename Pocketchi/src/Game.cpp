@@ -51,8 +51,14 @@ void Game::setup(void)
   }
 
   shouldSave = false;
-  onStage = 0;
+  changeStage(0);
   idleScreen.refreshMessageCycle();
+}
+
+void Game::changeStage(uint8_t stage)
+{
+  onStage = stage;
+  utils.refreshCycle();
 }
 
 void Game::loadGame(void)
@@ -123,7 +129,7 @@ void Game::mainMenuTick(void)
   switch (titleMenu.action())
   {
   case 1:
-    onStage = 1;
+    changeStage(1);
     idleScreen.refresh(false);
     break;
   case 2:
@@ -138,11 +144,11 @@ void Game::mainIdleTick(void)
   switch (idleScreen.action(&utils))
   {
   case 1:
-    onStage = 4;
+    changeStage(4);
     foodScreen.refresh();
     break;
   case 2:
-    onStage = 8;
+    changeStage(8);
     stats.refreshEnemy();
     stats.startBattle();
     startBattleScreen.refresh();
@@ -156,12 +162,12 @@ void Game::mainBattleTick(void)
   switch (timeEventScreen.action(&utils, &stats))
   {
   case 1:
-    onStage = 3;
+    changeStage(3);
     battleAction = false;
     battleScreen.refresh();
     break;
   case 2:
-    onStage = 3;
+    changeStage(3);
     battleAction = true;
     battleScreen.refresh();
     break;
@@ -174,17 +180,17 @@ void Game::mainBattleAnimationTick(void)
   switch (battleScreen.action(&stats, battleAction))
   {
   case 1:
-    onStage = 2;
+    changeStage(2);
     stats.refresh();
     break;
   case 2:
-    onStage = 6;
+    changeStage(6);
     lossScreen.refresh();
     stats.incHP(MAX_LIFE);
     stats.refreshDistance();
     break;
   case 3:
-    onStage = 7;
+    changeStage(7);
     victoryScreen.refresh();
     if (stats.getDistance() == 1)
     {
@@ -200,7 +206,7 @@ void Game::mainFoodTick(void)
   foodScreen.eventDisplay(&utils, &stats);
   if (foodScreen.action(&utils))
   {
-    onStage = 7;
+    changeStage(7);
     victoryScreen.refresh();
   }
 }
@@ -210,7 +216,7 @@ void Game::mainSickTick(void)
   sickScreen.eventDisplay(&utils);
   if (sickScreen.action(&utils))
   {
-    onStage = 7;
+    changeStage(7);
     victoryScreen.refresh();
   }
 }
@@ -220,7 +226,7 @@ void Game::mainLossTick(void)
   lossScreen.eventDisplay(&utils);
   if (lossScreen.action(&utils))
   {
-    onStage = 5;
+    changeStage(5);
     sickScreen.refresh();
   }
 }
@@ -230,11 +236,12 @@ void Game::mainVictoryTick(void)
   victoryScreen.eventDisplay(&utils);
   if (victoryScreen.action(&utils))
   {
-    onStage = 1;
+    changeStage(1);
     idleScreen.refresh(shouldSave);
     if (shouldSave)
     {
       saveGame();
+      shouldSave = false;
     }
   }
 }
@@ -244,6 +251,6 @@ void Game::mainStartBattleTick(void)
   startBattleScreen.eventDisplay(&utils, &stats);
   if (startBattleScreen.action())
   {
-    onStage = 2;
+    changeStage(2);
   }
 }

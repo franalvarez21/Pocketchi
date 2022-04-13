@@ -37,7 +37,7 @@ public:
 
   void refresh()
   {
-    cycleAnimation = MAX_ANIMATION_FRAMES * 2;
+    cycleAnimation = MAX_ANIMATION_FRAMES + 16;
   }
 
   void eventDisplay(Utils *utils, Stats *stats, bool battleAction)

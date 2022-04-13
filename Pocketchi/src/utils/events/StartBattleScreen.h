@@ -17,7 +17,7 @@ public:
 
   void refresh()
   {
-    cycleAnimation = MAX_ANIMATION_FRAMES;
+    cycleAnimation = MAX_ANIMATION_FRAMES + 16;
   }
 
   void eventDisplay(Utils *utils, Stats *stats)

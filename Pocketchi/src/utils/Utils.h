@@ -31,6 +31,11 @@ public:
       cycle = CYCLE_MAX;
     }
   }
+
+  void refreshCycle()
+  {
+    cycle = CYCLE_MAX;
+  }
 };
 
 #include "Stats.h"
