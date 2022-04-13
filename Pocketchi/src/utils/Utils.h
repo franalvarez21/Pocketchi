@@ -5,8 +5,10 @@
 
 #include <Arduboy2.h>
 #include <Tinyfont.h>
+#include <EEPROM.h>
 
 #include "const/Common.h"
+#include "const/Enemies.h"
 #include "const/Pet.h"
 #include "const/Title.h"
 #include "helpers/CharDraw.h"

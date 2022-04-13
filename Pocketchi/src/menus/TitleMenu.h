@@ -10,7 +10,7 @@ private:
   bool actionType = false;
 
 public:
-  bool action()
+  uint8_t action()
   {
     if (!actionFlag)
     {
@@ -31,9 +31,9 @@ public:
     {
       actionTime = MAX_ANIMATION_FRAMES;
       actionFlag = false;
-      return actionType;
+      return actionType ? 1 : 2;
     }
-    return false;
+    return 0;
   }
 
   void eventDisplay()

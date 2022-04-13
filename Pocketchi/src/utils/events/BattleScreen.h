@@ -14,7 +14,7 @@ public:
       {
         stats->decHPEnemy(1);
       }
-      else
+      else if (stats->getCurrentEnemyID() != 1)
       {
         stats->decHP(1);
       }
@@ -52,7 +52,7 @@ public:
         Arduboy2Base::drawBitmap(10, 8 + ((MAX_LIFE - stats->getHPEnemy()) * 8), Common::healthOff, 4, 7, BLACK);
       }
     }
-    else
+    else if (stats->getCurrentEnemyID() != 1)
     {
       if (utils->cycle % 4 == 0)
       {
@@ -63,14 +63,6 @@ public:
     cycleAnimation--;
 
     utils->charDraw.DisplayLookingLeft(utils->cycle, MAX_MOVEMENT_STEPS - 1, 28, battleAction);
-
-    if (stats->getDistance() == 1)
-    {
-      utils->charDraw.DisplayLookingRight(utils->cycle, 2, 28, battleAction);
-    }
-    else
-    {
-      utils->charDraw.DisplayDummy(2, 20);
-    }
+    utils->charDraw.DisplayEnemy(utils->cycle, stats->getCurrentEnemyID(), stats->getDistance(), battleAction);
   }
 };

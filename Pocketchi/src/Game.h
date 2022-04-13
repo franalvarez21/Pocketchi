@@ -10,6 +10,9 @@
 #define CYCLE_MAX 20
 #define CYCLE_HALF 10
 
+#define SAVE_FILE_ADDRESS (EEPROM_STORAGE_SPACE_START + 64)
+#define GAME_ID 112
+
 #include "utils/Utils.h"
 
 class Game
@@ -17,6 +20,8 @@ class Game
 public:
   void setup(void);
   void loop(void);
+  void loadGame(void);
+  void saveGame(void);
   void mainMenuTick(void);
   void mainIdleTick(void);
   void mainBattleTick(void);
@@ -26,5 +31,5 @@ public:
   void mainSickTick(void);
   void mainLossTick(void);
   void mainVictoryTick(void);
-  void mainAutosaveTick(void);
+  void mainStartBattleTick(void);
 };

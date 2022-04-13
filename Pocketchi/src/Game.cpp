@@ -5,15 +5,18 @@
 #include "utils/events/IdleScreen.h"
 #include "utils/events/TimeEventScreen.h"
 #include "utils/events/BattleScreen.h"
+#include "utils/events/StartBattleScreen.h"
 #include "utils/events/VictoryScreen.h"
 #include "utils/events/FoodScreen.h"
 #include "utils/events/LossScreen.h"
 #include "utils/events/SickScreen.h"
 
 Arduboy2Base arduboy;
+byte gameID;
 
 uint8_t onStage;
 bool battleAction;
+bool shouldSave;
 
 Utils utils;
 Stats stats;
@@ -26,6 +29,7 @@ VictoryScreen victoryScreen;
 FoodScreen foodScreen;
 LossScreen lossScreen;
 SickScreen sickScreen;
+StartBattleScreen startBattleScreen;
 
 void Game::setup(void)
 {
@@ -35,10 +39,32 @@ void Game::setup(void)
   arduboy.systemButtons();
   arduboy.waitNoButtons();
   arduboy.audio.off();
+  gameID = GAME_ID;
 
-  stats.init();
+  if ((EEPROM.read(SAVE_FILE_ADDRESS) == gameID) && (EEPROM.read(SAVE_FILE_ADDRESS + sizeof(byte) + sizeof(Stats)) == gameID))
+  {
+    loadGame();
+  }
+  else
+  {
+    stats.init();
+  }
+
+  shouldSave = false;
   onStage = 0;
   idleScreen.refreshMessageCycle();
+}
+
+void Game::loadGame(void)
+{
+  EEPROM.get(SAVE_FILE_ADDRESS + sizeof(byte), stats);
+}
+
+void Game::saveGame(void)
+{
+  EEPROM.put(SAVE_FILE_ADDRESS, gameID);
+  EEPROM.put(SAVE_FILE_ADDRESS + sizeof(byte), stats);
+  EEPROM.put(SAVE_FILE_ADDRESS + sizeof(byte) + sizeof(Stats), gameID);
 }
 
 void Game::loop(void)
@@ -77,8 +103,11 @@ void Game::loop(void)
   case 7:
     mainVictoryTick();
     break;
+  case 8:
+    mainStartBattleTick();
+    break;
   default:
-    mainAutosaveTick();
+    mainMenuTick();
     break;
   }
 
@@ -91,10 +120,15 @@ void Game::mainMenuTick(void)
 {
   rand() % analogRead(0);
   titleMenu.eventDisplay();
-  if (titleMenu.action())
+  switch (titleMenu.action())
   {
+  case 1:
     onStage = 1;
-    idleScreen.refresh();
+    idleScreen.refresh(false);
+    break;
+  case 2:
+    stats.init();
+    break;
   }
 }
 
@@ -108,8 +142,10 @@ void Game::mainIdleTick(void)
     foodScreen.refresh();
     break;
   case 2:
-    onStage = 2;
+    onStage = 8;
+    stats.refreshEnemy();
     stats.startBattle();
+    startBattleScreen.refresh();
     break;
   }
 }
@@ -150,6 +186,10 @@ void Game::mainBattleAnimationTick(void)
   case 3:
     onStage = 7;
     victoryScreen.refresh();
+    if (stats.getDistance() == 1)
+    {
+      shouldSave = true;
+    }
     stats.redDistance(1);
     break;
   }
@@ -191,11 +231,19 @@ void Game::mainVictoryTick(void)
   if (victoryScreen.action(&utils))
   {
     onStage = 1;
-    idleScreen.refresh();
+    idleScreen.refresh(shouldSave);
+    if (shouldSave)
+    {
+      saveGame();
+    }
   }
 }
 
-void Game::mainAutosaveTick(void)
+void Game::mainStartBattleTick(void)
 {
-  onStage = 1;
+  startBattleScreen.eventDisplay(&utils, &stats);
+  if (startBattleScreen.action())
+  {
+    onStage = 2;
+  }
 }

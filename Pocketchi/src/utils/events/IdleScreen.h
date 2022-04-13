@@ -9,6 +9,7 @@ private:
   uint8_t cycleIdle;
   uint8_t cycleMoving;
   uint8_t messageCycle;
+  uint8_t saveMessageCycle;
 
 public:
   uint8_t action(Utils *utils)
@@ -30,13 +31,18 @@ public:
     return 0;
   }
 
-  void refresh()
+  void refresh(bool saveMessage)
   {
     moving = false;
     direction = false;
     currentPosition = MAX_MOVEMENT_STEPS - 3;
     cycleIdle = MAX_ANIMATION_FRAMES * 2;
     cycleMoving = 0;
+    saveMessageCycle = 0;
+    if (saveMessage)
+    {
+      saveMessageCycle = cycleIdle;
+    }
   }
 
   void refreshMessageCycle()
@@ -55,8 +61,15 @@ public:
       utils->texts.printLine(8, 8, "LEVEL");
       utils->texts.printValue(34, 8, stats->getLevel());
 
-      utils->texts.printLine(75, 8, "DISTANCE");
-      utils->texts.printValue(116, 8, stats->getDistance());
+      utils->texts.printLine(8, 13, "DISTANCE");
+      utils->texts.printValue(49, 13, stats->getDistance());
+    }
+
+    if (saveMessageCycle > 0)
+    {
+      saveMessageCycle--;
+
+      utils->texts.printLine(75, 8, "GAME SAVED!");
     }
 
     if (moving)

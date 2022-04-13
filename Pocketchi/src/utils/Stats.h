@@ -6,12 +6,15 @@ private:
   uint8_t hp;
   uint8_t hpEnemy;
   uint8_t level;
-  uint8_t userLevel;
+  size_t userLevel;
   uint8_t distance;
+
   uint8_t arrowPosition;
+  bool arrowDirection;
+
   uint8_t battleBarPoints[MAX_BATTLE_POINTS];
   uint8_t steps[7] = {4, 6, 8, 10, 10, 12, 12};
-  bool arrowDirection;
+  uint8_t currentEnemyID;
 
 public:
   void init()
@@ -57,6 +60,16 @@ public:
         bucleBattleBar = true;
       }
     }
+
+    if (currentEnemyID == 8)
+    {
+      uint8_t position = rand() % MAX_BATTLE_POINTS;
+      for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
+      {
+        battleBarPoints[i] = 0;
+      }
+      battleBarPoints[position] = 1;
+    }
   }
 
   void refresh()
@@ -67,7 +80,19 @@ public:
     arrowDirection = true;
   }
 
-  uint8_t getLevel()
+  void refreshEnemy()
+  {
+    if (userLevel <= MAX_LIFE)
+    {
+      currentEnemyID = userLevel;
+    }
+    else
+    {
+      currentEnemyID = (rand() % (MAX_LIFE + 1)) + 1;
+    }
+  }
+
+  size_t getLevel()
   {
     return userLevel;
   }
@@ -85,6 +110,11 @@ public:
   uint8_t getHPEnemy()
   {
     return hpEnemy;
+  }
+
+  uint8_t getCurrentEnemyID()
+  {
+    return currentEnemyID;
   }
 
   uint8_t getArrowPosition(bool modifyPosition)
