@@ -27,7 +27,7 @@ https://github.com/felipemanga/ProjectABE
 
 ## Arduboy site post
 
-WIP
+https://community.arduboy.com/t/pocketchi-pocket-pet-game/10371
 
 ## Compilation log
 
