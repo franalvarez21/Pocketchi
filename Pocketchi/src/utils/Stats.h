@@ -13,7 +13,7 @@ private:
   bool arrowDirection;
 
   uint8_t battleBarPoints[MAX_BATTLE_POINTS];
-  uint8_t steps[7] = {4, 6, 8, 10, 10, 12, 12};
+  uint8_t steps[7] = {4, 6, 6, 5, 5, 8, 8};
   uint8_t currentEnemyID;
 
 public:
@@ -24,18 +24,19 @@ public:
     level = 1;
     userLevel = level;
     distance = steps[level - 1];
+    currentEnemyID = 0;
     startBattle();
   }
 
   void startBattle()
   {
-    if (distance > 0)
+    if (currentEnemyID > MAX_LIFE)
     {
-      hpEnemy = level;
+      hpEnemy = 5;
     }
     else
     {
-      hpEnemy = MAX_LIFE;
+      hpEnemy = currentEnemyID;
     }
 
     refresh();
@@ -55,13 +56,14 @@ public:
           valid++;
         }
       }
-      if (valid > 2)
+
+      if (valid > 3 || (currentEnemyID == MAX_LIFE - 1 && valid > 1) || (currentEnemyID == MAX_LIFE && valid > 2) || (currentEnemyID > MAX_LIFE))
       {
         bucleBattleBar = true;
       }
     }
 
-    if (currentEnemyID == 8)
+    if (currentEnemyID > MAX_LIFE)
     {
       uint8_t position = rand() % MAX_BATTLE_POINTS;
       for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
@@ -86,7 +88,7 @@ public:
     {
       currentEnemyID = userLevel;
     }
-    else
+    else if (currentEnemyID == 0)
     {
       currentEnemyID = (rand() % (MAX_LIFE + 1)) + 1;
     }
@@ -160,12 +162,18 @@ public:
       refreshDistance();
       incHP(MAX_LIFE);
       incLevel(1);
+
+      if (userLevel > MAX_LIFE)
+      {
+        distance = rand() % 2 == 0 ? 2 : 3;
+      }
     }
   }
 
   void refreshDistance()
   {
     distance = steps[level - 1];
+    currentEnemyID = 0;
   }
 
   void incHP(uint8_t val)

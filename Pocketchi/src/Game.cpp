@@ -189,7 +189,6 @@ void Game::mainBattleAnimationTick(void)
     changeStage(6);
     lossScreen.refresh();
     stats.incHP(MAX_LIFE);
-    stats.refreshDistance();
     break;
   case 3:
     changeStage(7);
