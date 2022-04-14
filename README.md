@@ -11,8 +11,8 @@ Please refer to https://community.arduboy.com/ on how to acquire, compile or upl
 
 ## Gameplay
 
-- Pad: Movement
-- B Button: Cancel
+- Pad: Info and Save options
+- B Button: Food
 - A Button: Action
 
 ## Emulation notes
@@ -31,7 +31,8 @@ WIP
 
 # v0.1 Base game
 
-August 8, 2021. V0.1
+April 14, 2022. V0.1
 
-Sketch uses 24588 bytes (85%) of program storage space. Maximum is 28672 bytes.
-Global variables use 1645 bytes (64%) of dynamic memory, leaving 915 bytes for local variables. Maximum is 2560 bytes.
+Sketch uses 18730 bytes (65%) of program storage space. Maximum is 28672 bytes.
+Global variables use 1417 bytes (55%) of dynamic memory, leaving 1143 bytes for local variables. Maximum is 2560 bytes.
+
