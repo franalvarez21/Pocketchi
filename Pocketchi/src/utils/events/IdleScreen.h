@@ -5,6 +5,7 @@ class IdleScreen
 private:
   bool moving;
   bool direction;
+  bool canSave;
   uint8_t currentPosition;
   uint8_t cycleIdle;
   uint8_t cycleMoving;
@@ -16,6 +17,13 @@ public:
   {
     if (Arduboy2Base::justPressed(RIGHT_BUTTON) || Arduboy2Base::justPressed(LEFT_BUTTON) || Arduboy2Base::justPressed(UP_BUTTON) || Arduboy2Base::justPressed(DOWN_BUTTON))
     {
+      if (messageCycle > 0 && canSave)
+      {
+        refreshSaveMessageCycle();
+        canSave = false;
+        refreshMessageCycle();
+        return 3;
+      }
       refreshMessageCycle();
     }
     if (Arduboy2Base::justPressed(B_BUTTON))
@@ -31,7 +39,7 @@ public:
     return 0;
   }
 
-  void refresh(bool saveMessage)
+  void refresh()
   {
     moving = false;
     direction = false;
@@ -39,15 +47,17 @@ public:
     cycleIdle = MAX_ANIMATION_FRAMES * 2;
     cycleMoving = 0;
     saveMessageCycle = 0;
-    if (saveMessage)
-    {
-      saveMessageCycle = cycleIdle;
-    }
+    canSave = true;
   }
 
   void refreshMessageCycle()
   {
     messageCycle = MAX_ANIMATION_FRAMES * 2;
+  }
+
+  void refreshSaveMessageCycle()
+  {
+    saveMessageCycle = MAX_ANIMATION_FRAMES * 2;
   }
 
   void eventDisplay(Utils *utils, Stats *stats)
@@ -58,11 +68,18 @@ public:
     {
       messageCycle--;
 
-      utils->texts.printLine(8, 8, "LEVEL");
-      utils->texts.printValue(34, 8, stats->getLevel());
+      utils->texts.printLine(0, 8, "LEVEL");
+      utils->texts.printValue(26, 8, stats->getLevel());
 
-      utils->texts.printLine(8, 13, "DISTANCE");
-      utils->texts.printValue(49, 13, stats->getDistance());
+      utils->texts.printLine(0, 13, "DISTANCE");
+      utils->texts.printValue(41, 13, stats->getDistance());
+
+      if (saveMessageCycle == 0 && canSave)
+      {
+        Arduboy2Base::drawBitmap(83, 8, Common::arrowsOption, 9, 9, WHITE);
+        utils->texts.printLine(94, 8, "PRESS");
+        utils->texts.printLine(94, 13, "TO SAVE");
+      }
     }
 
     if (saveMessageCycle > 0)

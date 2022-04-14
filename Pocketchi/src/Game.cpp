@@ -16,7 +16,6 @@ byte gameID;
 
 uint8_t onStage;
 bool battleAction;
-bool shouldSave;
 
 Utils utils;
 Stats stats;
@@ -50,9 +49,7 @@ void Game::setup(void)
     stats.init();
   }
 
-  shouldSave = false;
   changeStage(0);
-  idleScreen.refreshMessageCycle();
 }
 
 void Game::changeStage(uint8_t stage)
@@ -130,7 +127,7 @@ void Game::mainMenuTick(void)
   {
   case 1:
     changeStage(1);
-    idleScreen.refresh(false);
+    idleScreen.refresh();
     break;
   case 2:
     stats.init();
@@ -152,6 +149,9 @@ void Game::mainIdleTick(void)
     stats.refreshEnemy();
     stats.startBattle();
     startBattleScreen.refresh();
+    break;
+  case 3:
+    saveGame();
     break;
   }
 }
@@ -192,10 +192,6 @@ void Game::mainBattleAnimationTick(void)
   case 3:
     changeStage(7);
     victoryScreen.refresh();
-    if (stats.getDistance() == 1)
-    {
-      shouldSave = true;
-    }
     stats.redDistance(1);
     break;
   }
@@ -237,12 +233,7 @@ void Game::mainVictoryTick(void)
   if (victoryScreen.action(&utils))
   {
     changeStage(1);
-    idleScreen.refresh(shouldSave);
-    if (shouldSave)
-    {
-      saveGame();
-      shouldSave = false;
-    }
+    idleScreen.refresh();
   }
 }
 
