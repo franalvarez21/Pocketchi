@@ -22,11 +22,11 @@ public:
 
   void eventDisplay(Utils *utils, Stats *stats)
   {
-    Arduboy2Base::drawBitmap((MAX_MOVEMENT_STEPS * 12) + 6, 20, Common::exclamation, 10, 10, WHITE);
+    Arduboy2Base::drawBitmap(((MAX_MOVEMENT_STEPS - 1) * 12) + 6, 20, Common::exclamation, 10, 10, WHITE);
 
     cycleAnimation--;
 
-    utils->charDraw.DisplayLookingLeft(utils->cycle, MAX_MOVEMENT_STEPS, 28, false);
-    utils->charDraw.DisplayEnemy(utils->cycle, stats->getCurrentEnemyID(), stats->getDistance(), false);
+    utils->charDraw.DisplayLookingLeft(utils->cycle, (MAX_MOVEMENT_STEPS - 1), 28, false);
+    utils->charDraw.DisplayEnemy(utils->cycle, stats->getCurrentEnemyID(), stats->getDistance(), false, false);
   }
 };

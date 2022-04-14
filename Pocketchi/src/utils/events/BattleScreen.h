@@ -16,7 +16,14 @@ public:
       }
       else if (stats->getCurrentEnemyID() != 1)
       {
-        stats->decHP(1);
+        if (stats->getDistance() == 1)
+        {
+          stats->decHP(2);
+        }
+        else
+        {
+          stats->decHP(1);
+        }
       }
 
       if (stats->getHP() == 0)
@@ -49,20 +56,24 @@ public:
     {
       if (utils->cycle % 4 == 0)
       {
-        Arduboy2Base::drawBitmap(10, 8 + ((MAX_LIFE - stats->getHPEnemy()) * 8), Common::healthOff, 4, 7, BLACK);
+        Arduboy2Base::drawBitmap(8, 8 + ((MAX_LIFE - stats->getHPEnemy()) * 8), Common::healthOff, 4, 7, BLACK);
       }
     }
     else if (stats->getCurrentEnemyID() != 1)
     {
       if (utils->cycle % 4 == 0)
       {
-        Arduboy2Base::drawBitmap(114, 8 + ((MAX_LIFE - stats->getHP()) * 8), Common::healthOff, 4, 7, BLACK);
+        if (stats->getDistance() == 1 && stats->getHP() > 1)
+        {
+          Arduboy2Base::drawBitmap(116, 8 + ((MAX_LIFE - stats->getHP() + 1) * 8), Common::healthOff, 4, 7, BLACK);
+        }
+        Arduboy2Base::drawBitmap(116, 8 + ((MAX_LIFE - stats->getHP()) * 8), Common::healthOff, 4, 7, BLACK);
       }
     }
 
     cycleAnimation--;
 
     utils->charDraw.DisplayLookingLeft(utils->cycle, MAX_MOVEMENT_STEPS - 1, 28, battleAction);
-    utils->charDraw.DisplayEnemy(utils->cycle, stats->getCurrentEnemyID(), stats->getDistance(), battleAction);
+    utils->charDraw.DisplayEnemy(utils->cycle, stats->getCurrentEnemyID(), stats->getDistance(), battleAction, true);
   }
 };

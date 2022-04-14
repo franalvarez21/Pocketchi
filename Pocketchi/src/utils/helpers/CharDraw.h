@@ -3,7 +3,7 @@
 class CharDraw
 {
 public:
-  void DisplayEnemy(uint8_t cycle, uint8_t enemyID, uint8_t distance, bool battleAction)
+  void DisplayEnemy(uint8_t cycle, uint8_t enemyID, uint8_t distance, bool battleAction, bool displayStar)
   {
     switch (enemyID)
     {
@@ -85,9 +85,9 @@ public:
       break;
     }
 
-    if (distance == 1)
+    if (distance == 1 && displayStar)
     {
-      Arduboy2Base::drawBitmap(24, 6, Enemies::star, 10, 10, WHITE);
+      Arduboy2Base::drawBitmap(16, 6, Enemies::star, 10, 10, WHITE);
     }
   }
 

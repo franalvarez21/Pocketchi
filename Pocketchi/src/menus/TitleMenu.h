@@ -36,7 +36,7 @@ public:
     return 0;
   }
 
-  void eventDisplay()
+  void eventDisplay(Utils *utils)
   {
     Arduboy2Base::drawBitmap(0, 0, Title::titleScreen, 128, 64, WHITE);
 
@@ -60,5 +60,17 @@ public:
     {
       Arduboy2Base::drawBitmap(90, 30, Common::actionButton, 30, 30, WHITE);
     }
+
+    if (utils->cycle < CYCLE_HALF)
+    {
+      Arduboy2Base::drawBitmap(16, 29, Title::titleAnimation, 46, 34, WHITE);
+    }
+    else
+    {
+      Arduboy2Base::drawBitmap(16, 29, Title::titleAnimation2, 46, 34, WHITE);
+    }
+
+    utils->texts.printLine(66, 52, "START");
+    utils->texts.printLine(64, 57, "RESET");
   }
 };

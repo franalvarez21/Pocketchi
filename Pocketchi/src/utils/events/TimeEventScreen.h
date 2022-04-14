@@ -41,13 +41,13 @@ public:
 
   void eventDisplay(Utils *utils, Stats *stats)
   {
-    Arduboy2Base::drawBitmap(8, 16, Common::battleBar, 112, 10, WHITE);
-    Arduboy2Base::drawBitmap(7 + (stats->getArrowPosition(!actionFlag) * 8), 4, Common::arrowDown, 10, 10, WHITE);
+    Arduboy2Base::drawBitmap(8, 14, Common::battleBar, 112, 10, WHITE);
+    Arduboy2Base::drawBitmap(7 + (stats->getArrowPosition(!actionFlag) * 8), 2, Common::arrowDown, 10, 10, WHITE);
     for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
     {
       if (stats->getBar(i) == 0)
       {
-        Arduboy2Base::drawBitmap(8 + (i * 8), 16, Common::battleBarSlot, 8, 8, BLACK);
+        Arduboy2Base::drawBitmap(8 + (i * 8), 14, Common::battleBarSlot, 8, 8, BLACK);
       }
     }
 
@@ -60,16 +60,22 @@ public:
 
       if (actionType)
       {
-        Arduboy2Base::drawBitmap(49, 30, Common::actionButtonOK, 30, 30, WHITE);
+        Arduboy2Base::drawBitmap(49, 32, Common::actionButtonOK, 30, 30, WHITE);
+        utils->texts.printLine(80, 34, "HIT");
       }
       else
       {
-        Arduboy2Base::drawBitmap(49, 30, Common::actionButtonKO, 30, 30, WHITE);
+        Arduboy2Base::drawBitmap(49, 32, Common::actionButtonKO, 30, 30, WHITE);
+        utils->texts.printLine(80, 34, "MISS");
       }
     }
     else
     {
-      Arduboy2Base::drawBitmap(49, 30, Common::actionButton, 30, 30, WHITE);
+      Arduboy2Base::drawBitmap(49, 32, Common::actionButton, 30, 30, WHITE);
+      if (utils->cycle > CYCLE_HALF)
+      {
+        utils->texts.printLine(19, 56, "ACTION");
+      }
     }
   }
 };

@@ -68,17 +68,39 @@ public:
     {
       messageCycle--;
 
-      utils->texts.printLine(0, 8, "LEVEL");
-      utils->texts.printValue(26, 8, stats->getLevel());
+      utils->texts.printLine(0, 2, "LEVEL");
+      utils->texts.printValue(26, 2, stats->getLevel());
 
-      utils->texts.printLine(0, 13, "DISTANCE");
-      utils->texts.printValue(41, 13, stats->getDistance());
+      utils->texts.printLine(0, 7, "DISTANCE");
+      utils->texts.printValue(41, 7, stats->getDistance());
+
+      utils->texts.printLine(0, 12, "LIFE");
+      utils->texts.printValue(21, 12, stats->getHP());
 
       if (saveMessageCycle == 0 && canSave)
       {
-        Arduboy2Base::drawBitmap(83, 8, Common::arrowsOption, 9, 9, WHITE);
-        utils->texts.printLine(94, 8, "PRESS");
-        utils->texts.printLine(94, 13, "TO SAVE");
+        Arduboy2Base::drawBitmap(83, 2, Common::arrowsOption, 9, 9, WHITE);
+        utils->texts.printLine(94, 2, "PRESS");
+        utils->texts.printLine(94, 7, "TO SAVE");
+      }
+      else if (saveMessageCycle == 0 && !canSave)
+      {
+        Arduboy2Base::drawBitmap(119, 2, Common::miniOption, 6, 6, WHITE);
+        Arduboy2Base::drawBitmap(114, 7, Common::miniOption, 6, 6, WHITE);
+        utils->texts.printLine(89, 2, "ACTION");
+        utils->texts.printLine(94, 7, "FOOD");
+      }
+    }
+    else
+    {
+      Arduboy2Base::drawBitmap(0, 2, Common::arrowsOption, 9, 9, WHITE);
+      utils->texts.printLine(11, 2, "INFO");
+      if (saveMessageCycle == 0)
+      {
+        Arduboy2Base::drawBitmap(119, 2, Common::miniOption, 6, 6, WHITE);
+        Arduboy2Base::drawBitmap(114, 7, Common::miniOption, 6, 6, WHITE);
+        utils->texts.printLine(89, 2, "ACTION");
+        utils->texts.printLine(94, 7, "FOOD");
       }
     }
 
@@ -86,7 +108,7 @@ public:
     {
       saveMessageCycle--;
 
-      utils->texts.printLine(75, 8, "GAME SAVED!");
+      utils->texts.printLine(75, 2, "GAME SAVED!");
     }
 
     if (moving)

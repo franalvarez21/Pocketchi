@@ -122,7 +122,7 @@ void Game::loop(void)
 void Game::mainMenuTick(void)
 {
   rand() % analogRead(0);
-  titleMenu.eventDisplay();
+  titleMenu.eventDisplay(&utils);
   switch (titleMenu.action())
   {
   case 1:
@@ -131,6 +131,8 @@ void Game::mainMenuTick(void)
     break;
   case 2:
     stats.init();
+    changeStage(1);
+    idleScreen.refresh();
     break;
   }
 }
