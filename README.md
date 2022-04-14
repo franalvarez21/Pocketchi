@@ -2,6 +2,8 @@
 
 Pocketchi - Pocket pet for the Arduboy
 
+A simple game of hit and miss with cute and simple characters.
+
 <img src="https://github.com/franalvarez21/Pocketchi/blob/main/Pocketchi/title.png" width="200" height="100">
 <img src="https://github.com/franalvarez21/Pocketchi/blob/main/Pocketchi/demo.gif" width="200" height="100">
 
