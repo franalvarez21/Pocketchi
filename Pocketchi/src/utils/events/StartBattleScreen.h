@@ -3,7 +3,7 @@
 class StartBattleScreen
 {
 private:
-  uint8_t cycleAnimation;
+  size_t cycleAnimation;
 
 public:
   bool action()

@@ -18,7 +18,7 @@
 struct Utils
 {
 public:
-  uint8_t cycle = CYCLE_MAX;
+  size_t cycle = CYCLE_MAX;
   CharDraw charDraw;
   UIDraw uiDraw;
   Texts texts;

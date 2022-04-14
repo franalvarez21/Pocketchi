@@ -5,12 +5,12 @@
 class TitleMenu
 {
 private:
-  uint8_t actionTime = MAX_ANIMATION_FRAMES;
+  size_t actionTime = MAX_ANIMATION_FRAMES;
   bool actionFlag = false;
   bool actionType = false;
 
 public:
-  uint8_t action()
+  size_t action()
   {
     if (!actionFlag)
     {

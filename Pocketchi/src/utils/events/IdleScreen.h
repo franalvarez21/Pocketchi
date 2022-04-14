@@ -6,14 +6,14 @@ private:
   bool moving;
   bool direction;
   bool canSave;
-  uint8_t currentPosition;
-  uint8_t cycleIdle;
-  uint8_t cycleMoving;
-  uint8_t messageCycle;
-  uint8_t saveMessageCycle;
+  size_t currentPosition;
+  size_t cycleIdle;
+  size_t cycleMoving;
+  size_t messageCycle;
+  size_t saveMessageCycle;
 
 public:
-  uint8_t action(Utils *utils)
+  size_t action(Utils *utils)
   {
     if (Arduboy2Base::justPressed(RIGHT_BUTTON) || Arduboy2Base::justPressed(LEFT_BUTTON) || Arduboy2Base::justPressed(UP_BUTTON) || Arduboy2Base::justPressed(DOWN_BUTTON))
     {

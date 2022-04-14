@@ -3,10 +3,10 @@
 class BattleScreen
 {
 private:
-  uint8_t cycleAnimation;
+  size_t cycleAnimation;
 
 public:
-  uint8_t action(Stats *stats, bool battleAction)
+  size_t action(Stats *stats, bool battleAction)
   {
     if (cycleAnimation == 0)
     {

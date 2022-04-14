@@ -19,7 +19,7 @@ class Game
 {
 public:
   void setup(void);
-  void changeStage(uint8_t);
+  void changeStage(size_t);
   void loop(void);
   void loadGame(void);
   void saveGame(void);

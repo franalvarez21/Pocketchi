@@ -3,12 +3,12 @@
 class TimeEventScreen
 {
 private:
-  uint8_t actionTime = MAX_ANIMATION_FRAMES;
+  size_t actionTime = MAX_ANIMATION_FRAMES;
   bool actionFlag = false;
   bool actionType = false;
 
 public:
-  uint8_t action(Utils *utils, Stats *stats)
+  size_t action(Utils *utils, Stats *stats)
   {
     if (!actionFlag)
     {
@@ -43,7 +43,7 @@ public:
   {
     Arduboy2Base::drawBitmap(8, 14, Common::battleBar, 112, 10, WHITE);
     Arduboy2Base::drawBitmap(7 + (stats->getArrowPosition(!actionFlag) * 8), 2, Common::arrowDown, 10, 10, WHITE);
-    for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
+    for (size_t i = 0; i < MAX_BATTLE_POINTS; i++)
     {
       if (stats->getBar(i) == 0)
       {

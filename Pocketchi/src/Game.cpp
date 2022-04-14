@@ -14,7 +14,7 @@
 Arduboy2Base arduboy;
 byte gameID;
 
-uint8_t onStage;
+size_t onStage;
 bool battleAction;
 
 Utils utils;
@@ -52,7 +52,7 @@ void Game::setup(void)
   changeStage(0);
 }
 
-void Game::changeStage(uint8_t stage)
+void Game::changeStage(size_t stage)
 {
   onStage = stage;
   utils.refreshCycle();

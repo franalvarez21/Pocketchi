@@ -3,7 +3,7 @@
 class LossScreen
 {
 private:
-  uint8_t cycleAnimation;
+  size_t cycleAnimation;
 
 public:
   bool action(Utils *utils)
@@ -17,7 +17,7 @@ public:
 
   void refresh()
   {
-    cycleAnimation = MAX_ANIMATION_FRAMES;
+    cycleAnimation = MAX_ANIMATION_FRAMES * 2;
   }
 
   void eventDisplay(Utils *utils)

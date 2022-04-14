@@ -3,18 +3,18 @@
 struct Stats
 {
 private:
-  uint8_t hp;
-  uint8_t hpEnemy;
-  uint8_t level;
+  size_t hp;
+  size_t hpEnemy;
+  size_t level;
   size_t userLevel;
-  uint8_t distance;
+  size_t distance;
 
-  uint8_t arrowPosition;
+  size_t arrowPosition;
   bool arrowDirection;
 
-  uint8_t battleBarPoints[MAX_BATTLE_POINTS];
-  uint8_t steps[7] = {4, 6, 6, 5, 5, 8, 8};
-  uint8_t currentEnemyID;
+  size_t battleBarPoints[MAX_BATTLE_POINTS];
+  size_t steps[7] = {4, 3, 4, 4, 5, 6, 4};
+  size_t currentEnemyID;
 
 public:
   void init()
@@ -47,8 +47,8 @@ public:
     bool bucleBattleBar = false;
     while (!bucleBattleBar)
     {
-      uint8_t valid = 0;
-      for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
+      size_t valid = 0;
+      for (size_t i = 0; i < MAX_BATTLE_POINTS; i++)
       {
         battleBarPoints[i] = rand() % 100 < ((level + 2) * 10) ? 0 : 1;
         if (battleBarPoints[i] == 1)
@@ -65,8 +65,8 @@ public:
 
     if (currentEnemyID > MAX_LIFE)
     {
-      uint8_t position = rand() % MAX_BATTLE_POINTS;
-      for (uint8_t i = 0; i < MAX_BATTLE_POINTS; i++)
+      size_t position = rand() % MAX_BATTLE_POINTS;
+      for (size_t i = 0; i < MAX_BATTLE_POINTS; i++)
       {
         battleBarPoints[i] = 0;
       }
@@ -90,7 +90,7 @@ public:
     }
     else if (currentEnemyID == 0)
     {
-      currentEnemyID = (rand() % (MAX_LIFE + 1)) + 1;
+      currentEnemyID = (rand() % MAX_LIFE) + 2;
     }
   }
 
@@ -99,27 +99,27 @@ public:
     return userLevel;
   }
 
-  uint8_t getDistance()
+  size_t getDistance()
   {
     return distance;
   }
 
-  uint8_t getHP()
+  size_t getHP()
   {
     return hp;
   }
 
-  uint8_t getHPEnemy()
+  size_t getHPEnemy()
   {
     return hpEnemy;
   }
 
-  uint8_t getCurrentEnemyID()
+  size_t getCurrentEnemyID()
   {
     return currentEnemyID;
   }
 
-  uint8_t getArrowPosition(bool modifyPosition)
+  size_t getArrowPosition(bool modifyPosition)
   {
     if (modifyPosition)
     {
@@ -143,18 +143,18 @@ public:
     return arrowPosition;
   }
 
-  uint8_t getBar(uint8_t position)
+  size_t getBar(size_t position)
   {
     return battleBarPoints[position];
   }
 
-  void incLevel(uint8_t val)
+  void incLevel(size_t val)
   {
     level = min(level + val, MAX_LIFE);
     userLevel = min(userLevel + val, MAX_LEVEL);
   }
 
-  void redDistance(uint8_t val)
+  void redDistance(size_t val)
   {
     distance = max(distance - val, 0);
     if (distance == 0)
@@ -165,7 +165,7 @@ public:
 
       if (userLevel > MAX_LIFE)
       {
-        distance = rand() % 2 == 0 ? 2 : 3;
+        distance = (rand() % 2 == 0) ? 3 : 4;
       }
     }
   }
@@ -176,17 +176,17 @@ public:
     currentEnemyID = 0;
   }
 
-  void incHP(uint8_t val)
+  void incHP(size_t val)
   {
     hp = min(min(hp + val, level + 1), MAX_LIFE);
   }
 
-  void decHP(uint8_t val)
+  void decHP(size_t val)
   {
     hp = max(hp - val, 0);
   }
 
-  void decHPEnemy(uint8_t val)
+  void decHPEnemy(size_t val)
   {
     hpEnemy = max(hpEnemy - val, 0);
   }

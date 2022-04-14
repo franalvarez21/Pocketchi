@@ -3,7 +3,7 @@
 class CharDraw
 {
 public:
-  void DisplayEnemy(uint8_t cycle, uint8_t enemyID, uint8_t distance, bool battleAction, bool displayStar)
+  void DisplayEnemy(size_t cycle, size_t enemyID, size_t distance, bool battleAction, bool displayStar)
   {
     switch (enemyID)
     {
@@ -91,7 +91,7 @@ public:
     }
   }
 
-  void DisplayLookingLeft(uint8_t cycle, uint8_t screenPosition, uint8_t heightPosition, bool battleAction)
+  void DisplayLookingLeft(size_t cycle, size_t screenPosition, size_t heightPosition, bool battleAction)
   {
     screenPosition = screenPosition * 12;
 
@@ -100,7 +100,7 @@ public:
     DisplayFullBody(cycle, false, true, screenPosition, heightPosition);
   }
 
-  void DisplayLookingRight(uint8_t cycle, uint8_t screenPosition, uint8_t heightPosition, bool battleAction)
+  void DisplayLookingRight(size_t cycle, size_t screenPosition, size_t heightPosition, bool battleAction)
   {
     screenPosition = screenPosition * 12;
 
@@ -109,7 +109,7 @@ public:
     DisplayFullBody(cycle, true, false, screenPosition, heightPosition);
   }
 
-  void DisplayMovingLeft(uint8_t cycle, uint8_t screenPosition, uint8_t heightPosition)
+  void DisplayMovingLeft(size_t cycle, size_t screenPosition, size_t heightPosition)
   {
     screenPosition = screenPosition * 12;
 
@@ -118,7 +118,7 @@ public:
     DisplayFullBody(cycle, false, true, screenPosition, heightPosition);
   }
 
-  void DisplayMovingRight(uint8_t cycle, uint8_t screenPosition, uint8_t heightPosition)
+  void DisplayMovingRight(size_t cycle, size_t screenPosition, size_t heightPosition)
   {
     screenPosition = screenPosition * 12;
 
@@ -127,7 +127,7 @@ public:
     DisplayFullBody(cycle, true, false, screenPosition, heightPosition);
   }
 
-  void DisplayIdle(uint8_t cycle, uint8_t screenPosition, uint8_t heightPosition)
+  void DisplayIdle(size_t cycle, size_t screenPosition, size_t heightPosition)
   {
     screenPosition = screenPosition * 12;
 
@@ -137,7 +137,7 @@ public:
     DisplayFullBody(cycle, true, true, screenPosition, heightPosition);
   }
 
-  void DisplaySick(uint8_t cycle, uint8_t screenPosition, uint8_t heightPosition)
+  void DisplaySick(size_t cycle, size_t screenPosition, size_t heightPosition)
   {
     screenPosition = screenPosition * 12;
 
@@ -148,7 +148,7 @@ public:
   }
 
 private:
-  void DisplayFullBody(uint8_t cycle, bool leftEar, bool rightEar, uint8_t screenPosition, uint8_t heightPosition)
+  void DisplayFullBody(size_t cycle, bool leftEar, bool rightEar, size_t screenPosition, size_t heightPosition)
   {
     if (cycle < CYCLE_HALF)
     {

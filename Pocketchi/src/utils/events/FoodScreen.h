@@ -3,7 +3,7 @@
 class FoodScreen
 {
 private:
-  uint8_t cycleAnimation;
+  size_t cycleAnimation;
 
 public:
   bool action(Utils *utils)

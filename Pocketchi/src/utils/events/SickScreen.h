@@ -4,7 +4,7 @@ class SickScreen
 {
 private:
   bool waitingAction;
-  uint8_t cycleAnimation;
+  size_t cycleAnimation;
 
 public:
   bool action(Utils *utils)
